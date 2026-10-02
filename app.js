@@ -1,6 +1,7 @@
 // Lumina Pure Photo Frame Engine
 const DEFAULT_FEED_URL = 'https://script.google.com/macros/s/AKfycbzmE0GDAimVinYOgt3ZIOLoI-VUZyT4T01U0W5V4HNLwem287-SRX86YrqSQ4BHArW5/exec';
 const SLIDE_INTERVAL_SECONDS = 12;
+const HARD_REFRESH_MINUTES = 15;
 
 class PhotoFrame {
   constructor() {
@@ -26,7 +27,12 @@ class PhotoFrame {
       this.showNextPhoto(true);
     }
 
-    // Auto-poll every 5 minutes for new photos in Drive
+    // Force a complete clean page reload every 15 minutes
+    setTimeout(() => {
+      window.location.reload(true);
+    }, HARD_REFRESH_MINUTES * 60 * 1000);
+
+    // Auto-poll every 5 minutes in background for new photos in Drive
     this.pollTimer = setInterval(() => {
       this.fetchPhotos(true);
     }, 5 * 60 * 1000);
@@ -50,6 +56,14 @@ class PhotoFrame {
       if (remoteList.length > 0) {
         const wasEmpty = this.photos.length === 0;
         this.photos = remoteList;
+
+        // Shuffle if multiple photos
+        if (this.photos.length > 1 && !isBackground) {
+          for (let i = this.photos.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.photos[i], this.photos[j]] = [this.photos[j], this.photos[i]];
+          }
+        }
 
         if (wasEmpty) {
           this.showNextPhoto(true);
