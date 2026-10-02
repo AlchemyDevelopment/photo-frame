@@ -8,6 +8,8 @@ const DEFAULT_PHOTOS = [
   'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=1920&q=80'
 ];
 
+const DEFAULT_FEED_URL = 'https://script.google.com/macros/s/AKfycbzmE0GDAimVinYOgt3ZIOLoI-VUZyT4T01U0W5V4HNLwem287-SRX86YrqSQ4BHArW5/exec';
+
 class PhotoFrame {
   constructor() {
     this.photos = [...DEFAULT_PHOTOS];
@@ -19,7 +21,7 @@ class PhotoFrame {
 
     // Load Settings
     this.settings = {
-      feedUrl: localStorage.getItem('lumina_feed_url') || '',
+      feedUrl: localStorage.getItem('lumina_feed_url') || DEFAULT_FEED_URL,
       interval: parseInt(localStorage.getItem('lumina_interval') || '12', 10),
       kenBurns: localStorage.getItem('lumina_kenburns') !== 'false',
       showClock: localStorage.getItem('lumina_clock') !== 'false',
@@ -98,13 +100,24 @@ class PhotoFrame {
       if (!res.ok) throw new Error('Network error');
       const data = await res.json();
 
-      let remoteList = Array.isArray(data) ? data : (data.photos || []);
+      let remoteList = [];
+      if (Array.isArray(data)) {
+        remoteList = data;
+      } else if (typeof data === 'string' && data.startsWith('http')) {
+        remoteList = [data];
+      } else if (data && data.photos && Array.isArray(data.photos)) {
+        remoteList = data.photos;
+      }
+
       if (remoteList.length > 0) {
         this.photos = remoteList;
         if (this.settings.shuffle && !isBackgroundPoll) {
           this.shufflePhotos();
         }
         this.updateCounter();
+        if (isBackgroundPoll) {
+          console.log(`Feed refreshed: ${this.photos.length} photos loaded.`);
+        }
       }
     } catch (err) {
       console.warn('Failed to load photos from feed URL:', err);
