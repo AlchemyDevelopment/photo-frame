@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="A modern, lightweight digital photo frame web app connected to Google Drive and GitHub Pages.">
+  <title>Lumina Photo Frame</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="slideshow-container" class="slideshow-container">
+    <!-- Active layer and background ambient blur layer -->
+    <div id="ambient-layer" class="ambient-layer"></div>
+    <div id="photo-layer-a" class="photo-layer active"></div>
+    <div id="photo-layer-b" class="photo-layer"></div>
+  </div>
+
+  <!-- Ambient Clock & Date Overlay -->
+  <div id="clock-widget" class="clock-widget">
+    <div id="time-display" class="time-display">12:00</div>
+    <div id="date-display" class="date-display">Monday, January 1</div>
+  </div>
+
+  <!-- Corner Status / Photo Index -->
+  <div id="photo-info" class="photo-info">
+    <span id="photo-counter">1 / 1</span>
+  </div>
+
+  <!-- Settings Gear (Tap/Hover to Reveal) -->
+  <button id="settings-toggle" class="settings-toggle" aria-label="Open Settings">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"></circle>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+    </svg>
+  </button>
+
+  <!-- Settings Modal Panel -->
+  <div id="settings-modal" class="settings-modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Frame Settings</h2>
+        <button id="close-settings" class="close-btn" aria-label="Close Settings">&times;</button>
+      </div>
+
+      <div class="settings-section">
+        <label for="feed-url">Google Drive Feed URL</label>
+        <p class="help-text">Paste your Google Apps Script web app URL below to connect your Drive folder:</p>
+        <input type="url" id="feed-url" placeholder="https://script.google.com/macros/s/.../exec">
+      </div>
+
+      <div class="settings-section">
+        <label for="interval-input">Slide Duration (seconds)</label>
+        <input type="number" id="interval-input" min="3" max="300" value="12">
+      </div>
+
+      <div class="settings-section">
+        <label class="checkbox-label">
+          <input type="checkbox" id="kenburns-toggle" checked>
+          <span>Enable Ken Burns Effect (Slow Cinematic Pan/Zoom)</span>
+        </label>
+      </div>
+
+      <div class="settings-section">
+        <label class="checkbox-label">
+          <input type="checkbox" id="clock-toggle" checked>
+          <span>Show Clock & Date Widget</span>
+        </label>
+      </div>
+
+      <div class="settings-section">
+        <label class="checkbox-label">
+          <input type="checkbox" id="shuffle-toggle" checked>
+          <span>Shuffle Photos</span>
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button id="save-settings-btn" class="primary-btn">Save & Refresh</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
