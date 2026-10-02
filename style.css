@@ -1,0 +1,310 @@
+:root {
+  --font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --bg-color: #050505;
+  --text-main: #f0f4f8;
+  --text-dim: rgba(240, 244, 248, 0.65);
+  --glass-bg: rgba(15, 20, 28, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --accent-color: #3b82f6;
+  --transition-time: 1.8s;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-color);
+  font-family: var(--font-family);
+  color: var(--text-main);
+  cursor: default;
+}
+
+/* Container for layers */
+.slideshow-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Ambient blurred background layer to fill letterboxes */
+.ambient-layer {
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(35px) brightness(0.45);
+  transform: scale(1.1);
+  transition: background-image var(--transition-time) ease-in-out;
+  z-index: 1;
+}
+
+/* Primary display layers for cross-fading */
+.photo-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0;
+  z-index: 2;
+  will-change: opacity, transform;
+  transition: opacity var(--transition-time) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.photo-layer.active {
+  opacity: 1;
+  z-index: 3;
+}
+
+/* Subtle cinematic Ken Burns effects */
+.photo-layer.kenburns-zoom-in {
+  animation: kenBurnsZoomIn 14s ease-out forwards;
+}
+
+.photo-layer.kenburns-zoom-out {
+  animation: kenBurnsZoomOut 14s ease-out forwards;
+}
+
+@keyframes kenBurnsZoomIn {
+  from {
+    transform: scale(1.0) translate(0, 0);
+  }
+  to {
+    transform: scale(1.06) translate(-1%, -1%);
+  }
+}
+
+@keyframes kenBurnsZoomOut {
+  from {
+    transform: scale(1.06) translate(1%, 0.5%);
+  }
+  to {
+    transform: scale(1.0) translate(0, 0);
+  }
+}
+
+/* Ambient Clock Widget */
+.clock-widget {
+  position: absolute;
+  bottom: 28px;
+  left: 32px;
+  z-index: 10;
+  padding: 12px 22px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.time-display {
+  font-size: 2.8rem;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.date-display {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--text-dim);
+  text-transform: capitalize;
+  margin-top: 2px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Photo Counter Indicator */
+.photo-info {
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  z-index: 10;
+  padding: 6px 14px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  opacity: 0.8;
+}
+
+/* Auto-hiding Settings Gear */
+.settings-toggle {
+  position: absolute;
+  bottom: 28px;
+  right: 28px;
+  z-index: 20;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.15;
+  transition: opacity 0.3s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.settings-toggle:hover {
+  opacity: 1;
+  transform: rotate(30deg);
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+/* Settings Modal */
+.settings-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.settings-modal.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.modal-content {
+  background: #12161f;
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 28px;
+  width: 90%;
+  max-width: 480px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-header h2 {
+  font-size: 1.35rem;
+  font-weight: 500;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: #fff;
+}
+
+.settings-section {
+  margin-bottom: 18px;
+}
+
+.settings-section label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.help-text {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+input[type="url"],
+input[type="number"] {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+input[type="url"]:focus,
+input[type="number"]:focus {
+  border-color: var(--accent-color);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-color);
+  cursor: pointer;
+}
+
+.modal-actions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.primary-btn {
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.primary-btn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
