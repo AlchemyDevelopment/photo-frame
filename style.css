@@ -1,96 +1,40 @@
-:root {
-  --bg-color: #000000;
-  --transition-time: 1.8s;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
+/* Tuned for weak frame hardware (RK3126C / Mali-400): no CSS filters, no continuous animations */
 html, body {
-  width: 100vw;
-  height: 100vh;
   margin: 0;
-  padding: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  background-color: var(--bg-color);
+  background: #000;
   cursor: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-/* Container for layers */
-.slideshow-container {
+.layer {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  background-color: #000000;
-}
-
-/* Ambient blurred background layer to seamlessly fill non-matching aspect ratios */
-.ambient-layer {
-  position: absolute;
-  top: -20px;
-  left: -20px;
-  right: -20px;
-  bottom: -20px;
-  background-size: cover;
-  background-position: center;
-  filter: blur(35px) brightness(0.45);
-  transform: scale(1.1);
-  transition: background-image var(--transition-time) ease-in-out;
-  z-index: 1;
-}
-
-/* Primary display layers for cross-fading */
-.photo-layer {
-  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+/* Backdrop: tiny thumbnail stretched to cover = free blur, dimmed by overlay below */
+#ambient {
+  background-size: cover;
+}
+
+#dim {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.photo {
+  background-size: contain;
   opacity: 0;
-  z-index: 2;
-  will-change: opacity, transform;
-  transition: opacity var(--transition-time) cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 1s linear;
 }
 
-.photo-layer.active {
+.photo.active {
   opacity: 1;
-  z-index: 3;
-}
-
-/* Subtle cinematic Ken Burns effects */
-.photo-layer.kenburns-zoom-in {
-  animation: kenBurnsZoomIn 14s ease-out forwards;
-}
-
-.photo-layer.kenburns-zoom-out {
-  animation: kenBurnsZoomOut 14s ease-out forwards;
-}
-
-@keyframes kenBurnsZoomIn {
-  from {
-    transform: scale(1.0) translate(0, 0);
-  }
-  to {
-    transform: scale(1.05) translate(-1%, -0.5%);
-  }
-}
-
-@keyframes kenBurnsZoomOut {
-  from {
-    transform: scale(1.05) translate(1%, 0.5%);
-  }
-  to {
-    transform: scale(1.0) translate(0, 0);
-  }
 }

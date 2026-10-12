@@ -3,16 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="description" content="Cinematic full-screen photo frame connected to Google Drive.">
   <title>Lumina Photo Frame</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="slideshow-container" class="slideshow-container">
-    <div id="ambient-layer" class="ambient-layer"></div>
-    <div id="photo-layer-a" class="photo-layer active"></div>
-    <div id="photo-layer-b" class="photo-layer"></div>
-  </div>
+  <div id="ambient" class="layer"></div>
+  <div id="dim" class="layer"></div>
+  <div id="photo-a" class="layer photo"></div>
+  <div id="photo-b" class="layer photo"></div>
   <script src="app.js"></script>
 </body>
 </html>
