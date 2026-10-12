@@ -2,6 +2,8 @@
 
 A fast, lightweight, full-screen photo frame web app built for liberated smart frames (like Nixplay) and tablets.
 
+> **Status:** No longer hosted on GitHub Pages. Our Nixplay frame now runs a native Android app (ClearFrame) that downloads photos from the same Google Drive feed and plays them offline — it's faster and lighter than any browser on that hardware. This web app still works if you host it yourself (instructions below), e.g. on a tablet.
+
 ## Features
 - **Built for weak hardware:** No CSS filters or continuous animations — runs smoothly on low-end frames (tested on a Nixplay with a Rockchip RK3126C, 512MB RAM, Android 7.1).
 - **Screen-sized images:** Requests photos from Google at the frame's resolution instead of full-size originals.
